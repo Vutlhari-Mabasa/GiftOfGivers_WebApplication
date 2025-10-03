@@ -1,0 +1,42 @@
+@model IEnumerable<GiftOfGivers_WebApplication.Models.Delivery>
+
+@{
+    ViewData["Title"] = "Deliveries";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Deliveries</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>DeliveryID</th>
+            <th>ReliefProjectID</th>
+            <th>ResourceID</th>
+            <th>Quantity</th>
+            <th>DeliveredAt</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.DeliveryID</td>
+                <td>@item.ReliefProjectID</td>
+                <td>@item.ResourceID</td>
+                <td>@item.Quantity</td>
+                <td>@item.DeliveredAt</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.DeliveryID" class="btn btn-info">Details</a>
+                    <a asp-action="Edit" asp-route-id="@item.DeliveryID" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.DeliveryID" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

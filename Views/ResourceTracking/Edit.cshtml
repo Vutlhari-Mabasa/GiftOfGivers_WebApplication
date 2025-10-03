@@ -1,0 +1,33 @@
+@model GiftOfGivers_WebApplication.Models.ResourceTracking
+
+@{
+    ViewData["Title"] = "Edit Resource";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit Resource</h1>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="ResourceID" />
+
+    <div class="mb-2">
+        <label asp-for="ReliefProjectID" class="form-label"></label>
+        <input asp-for="ReliefProjectID" class="form-control" />
+    </div>
+    <div class="mb-2">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="mb-2">
+        <label asp-for="Quantity" class="form-label"></label>
+        <input asp-for="Quantity" class="form-control" type="number" />
+    </div>
+    <div class="mb-2">
+        <label asp-for="Unit" class="form-label"></label>
+        <input asp-for="Unit" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    
+</form>

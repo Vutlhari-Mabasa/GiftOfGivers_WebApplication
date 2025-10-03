@@ -1,0 +1,35 @@
+@model GiftOfGivers_WebApplication.Models.Delivery
+
+@{
+    ViewData["Title"] = "Delete Delivery";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Delete Delivery</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+
+<dl class="row">
+    <dt class="col-sm-2">DeliveryID</dt>
+    <dd class="col-sm-10">@Model.DeliveryID</dd>
+
+    <dt class="col-sm-2">ReliefProjectID</dt>
+    <dd class="col-sm-10">@Model.ReliefProjectID</dd>
+
+    <dt class="col-sm-2">ResourceID</dt>
+    <dd class="col-sm-10">@Model.ResourceID</dd>
+
+    <dt class="col-sm-2">Quantity</dt>
+    <dd class="col-sm-10">@Model.Quantity</dd>
+
+    <dt class="col-sm-2">DeliveredAt</dt>
+    <dd class="col-sm-10">@Model.DeliveredAt</dd>
+   
+
+</dl>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="DeliveryID" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

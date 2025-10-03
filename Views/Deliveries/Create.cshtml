@@ -1,0 +1,37 @@
+@model GiftOfGivers_WebApplication.Models.Delivery
+
+@{
+    ViewData["Title"] = "Create Delivery";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create Delivery</h2>
+
+<form asp-action="Create" method="post" class="mt-3">
+    <div class="form-group">
+        <label asp-for="ReliefProjectID" class="control-label"></label>
+        <select asp-for="ReliefProjectID" class="form-control"
+                asp-items="@(ViewData["ReliefProjectID"] as SelectList)">
+            <option value="">-- Select Relief Project --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ResourceID" class="control-label"></label>
+        <select asp-for="ResourceID" class="form-control"
+                asp-items="@(ViewData["ResourceID"] as SelectList)">
+            <option value="">-- Select Resource --</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Quantity" class="form-label"></label>
+        <input asp-for="Quantity" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="DeliveredAt" class="form-label"></label>
+        <input asp-for="DeliveredAt" class="form-control" type="datetime-local" />
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

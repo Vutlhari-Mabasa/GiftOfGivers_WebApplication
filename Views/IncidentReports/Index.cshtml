@@ -1,0 +1,40 @@
+@model IEnumerable<GiftOfGivers_WebApplication.Models.IncidentReport>
+
+@{
+    ViewData["Title"] = "Incident Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Incident Reports</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Incident</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().Name)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Type)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Location)</th>
+            <th>@Html.DisplayNameFor(model => model.First().StartDate)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Type</td>
+                <td>@item.Location</td>
+                <td>@item.StartDate.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.IncidentID" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Edit" asp-route-id="@item.IncidentID" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.IncidentID" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

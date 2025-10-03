@@ -1,0 +1,29 @@
+@model GiftOfGivers_WebApplication.Models.Delivery
+
+@{
+    ViewData["Title"] = "Delivery Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Delivery Details</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">DeliveryID</dt>
+    <dd class="col-sm-10">@Model.DeliveryID</dd>
+
+    <dt class="col-sm-2">ReliefProjectID</dt>
+    <dd class="col-sm-10">@Model.ReliefProjectID</dd>
+
+    <dt class="col-sm-2">ResourceID</dt>
+    <dd class="col-sm-10">@Model.ResourceID</dd>
+
+    <dt class="col-sm-2">Quantity</dt>
+    <dd class="col-sm-10">@Model.Quantity</dd>
+
+    <dt class="col-sm-2">DeliveredAt</dt>
+    <dd class="col-sm-10">@Model.DeliveredAt</dd>
+    
+
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.DeliveryID" class="btn btn-warning">Edit</a> <a asp-action="Index" class="btn btn-secondary">Back</a>

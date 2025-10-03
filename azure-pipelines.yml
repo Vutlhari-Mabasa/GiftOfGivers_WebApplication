@@ -1,0 +1,62 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+# Step 1: Install .NET SDK
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '6.0.x'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+# Step 2: Install NuGet
+- task: NuGetToolInstaller@1
+
+# Step 3: Restore NuGet packages
+- task: NuGetCommand@2
+  inputs:
+    command: 'restore'
+    restoreSolution: '**/*.sln'
+
+# Step 4: Build the solution
+- task: VSBuild@1
+  inputs:
+    solution: '**/*.sln'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)"'
+    platform: 'Any CPU'
+    configuration: '$(buildConfiguration)'
+
+# Step 5: Run tests (optional)
+- task: VSTest@2
+  inputs:
+    platform: 'Any CPU'
+    configuration: '$(buildConfiguration)'
+
+# Step 6: Publish build artifacts
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+# Step 7: Deploy to Azure App Service
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: '<Your-Service-Connection-Name>'
+    appName: '<Your-App-Service-Name>'
+    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+
+# Step 8: Run EF Core Migrations on SQL Database
+- task: DotNetCoreCLI@2
+  displayName: 'Apply EF Core Migrations'
+  inputs:
+    command: 'custom'
+    projects: '**/*.csproj'
+    custom: 'ef'
+    arguments: 'database update --context ApplicationDbContext --connection "$(SqlConnectionString)"'

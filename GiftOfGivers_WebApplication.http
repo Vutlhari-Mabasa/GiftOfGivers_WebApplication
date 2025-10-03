@@ -1,0 +1,6 @@
+@GiftOfGivers_WebApplication_HostAddress = http://localhost:5181
+
+GET {{GiftOfGivers_WebApplication_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

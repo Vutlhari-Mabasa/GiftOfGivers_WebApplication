@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"] - Gift Of Givers</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #d4fc79, #96e6a1, #89f7fe, #66a6ff);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            font-family: 'Nunito', sans-serif;
+            color: #333;
+        }
+
+        @@keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(90deg, #66a6ff, #89f7fe);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+            .navbar .nav-link {
+                color: #fff !important;
+                font-weight: 600;
+            }
+
+                .navbar .nav-link:hover {
+                    color: #d4fc79 !important;
+                }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(90deg, #96e6a1, #d4fc79);
+            border: none;
+            font-weight: 600;
+        }
+
+            .btn-primary:hover {
+                background: linear-gradient(90deg, #d4fc79, #96e6a1);
+            }
+
+        .btn-warning, .btn-info, .btn-danger {
+            border: none;
+            font-weight: 600;
+        }
+
+        /* Tables */
+        .table {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+            .table th {
+                background: linear-gradient(90deg, #66a6ff, #89f7fe);
+                color: #fff;
+                font-weight: 700;
+                text-align: center;
+            }
+
+            .table td {
+                vertical-align: middle;
+                text-align: center;
+            }
+
+            .table tbody tr:hover {
+                background-color: #f0fff0;
+                transition: background 0.3s ease;
+            }
+
+        /* Page content container */
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white fw-bold" href="/">Gift Of Givers</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Donors">Donors</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/IncidentReports">Incident Reports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/ReliefProjects">Relief Projects</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Donations">Donations</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/ResourceTracking">Resources</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Deliveries">Deliveries</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/swagger" target="_blank">API Docs</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main role="main" class="container mt-4">
+        @RenderBody()
+    </main>
+</body>
+</html>
