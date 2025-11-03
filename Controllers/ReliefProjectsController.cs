@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GiftOfGivers_WebApplication.Data;
 using GiftOfGivers_WebApplication.Models;
@@ -24,8 +23,7 @@ namespace GiftOfGivers_WebApplication.Controllers
         // GET: ReliefProjects
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ReliefProjects.Include(r => r.IncidentReport);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.ReliefProjects.ToListAsync());
         }
 
         // GET: ReliefProjects/Details/5
@@ -36,9 +34,7 @@ namespace GiftOfGivers_WebApplication.Controllers
                 return NotFound();
             }
 
-            var reliefProject = await _context.ReliefProjects
-                .Include(r => r.IncidentReport)
-                .FirstOrDefaultAsync(m => m.ReliefProjectID == id);
+            var reliefProject = await _context.ReliefProjects.FindAsync(id);
             if (reliefProject == null)
             {
                 return NotFound();
@@ -50,14 +46,13 @@ namespace GiftOfGivers_WebApplication.Controllers
         // GET: ReliefProjects/Create
         public IActionResult Create()
         {
-            ViewData["IncidentID"] = new SelectList(_context.IncidentReports, "IncidentID", "Description");
             return View();
         }
 
         // POST: ReliefProjects/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReliefProjectID,IncidentID,Name,Status")] ReliefProject reliefProject)
+        public async Task<IActionResult> Create([Bind("ReliefProjectID,Name,Status")] ReliefProject reliefProject)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +60,6 @@ namespace GiftOfGivers_WebApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IncidentID"] = new SelectList(_context.IncidentReports, "IncidentID", "Description", reliefProject.IncidentID);
             return View(reliefProject);
         }
 
@@ -84,7 +78,6 @@ namespace GiftOfGivers_WebApplication.Controllers
             {
                 return NotFound();
             }
-            ViewData["IncidentID"] = new SelectList(_context.IncidentReports, "IncidentID", "Name", reliefProject.IncidentID);
             return View(reliefProject);
         }
 
@@ -93,7 +86,7 @@ namespace GiftOfGivers_WebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReliefProjectID,IncidentID,Name,Status")] ReliefProject reliefProject)
+        public async Task<IActionResult> Edit(int id, [Bind("ReliefProjectID,Name,Status")] ReliefProject reliefProject)
         {
             if (id != reliefProject.ReliefProjectID)
             {
@@ -120,7 +113,6 @@ namespace GiftOfGivers_WebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IncidentID"] = new SelectList(_context.IncidentReports, "IncidentID", "Name", reliefProject.IncidentID);
             return View(reliefProject);
         }
 
@@ -132,9 +124,7 @@ namespace GiftOfGivers_WebApplication.Controllers
                 return NotFound();
             }
 
-            var reliefProject = await _context.ReliefProjects
-                .Include(r => r.IncidentReport)
-                .FirstOrDefaultAsync(m => m.ReliefProjectID == id);
+            var reliefProject = await _context.ReliefProjects.FindAsync(id);
             if (reliefProject == null)
             {
                 return NotFound();

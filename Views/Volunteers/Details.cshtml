@@ -61,23 +61,6 @@
                         </div>
                     }
 
-                    @if (Model.VolunteerAssignments != null && Model.VolunteerAssignments.Any())
-                    {
-                        <div class="mb-4">
-                            <h5>Active Assignments</h5>
-                            <div class="list-group">
-                                @foreach (var assignment in Model.VolunteerAssignments)
-                                {
-                                    <div class="list-group-item">
-                                        <strong>@assignment.VolunteerTask?.Title</strong>
-                                        <span class="badge bg-info">@assignment.Status</span>
-                                        <br><small class="text-muted">@assignment.VolunteerTask?.Description</small>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    }
-
                     <div class="mt-4">
                         <a asp-action="Edit" asp-route-id="@Model.VolunteerID" class="btn btn-warning">
                             <i class="bi bi-pencil"></i> Edit
@@ -85,12 +68,9 @@
                         <a asp-action="Index" class="btn btn-secondary">
                             <i class="bi bi-arrow-left"></i> Back to List
                         </a>
-                        @if (Model.VolunteerAssignments == null || !Model.VolunteerAssignments.Any())
-                        {
-                            <a asp-action="Delete" asp-route-id="@Model.VolunteerID" class="btn btn-danger">
-                                <i class="bi bi-trash"></i> Delete
-                            </a>
-                        }
+                        <a asp-action="Delete" asp-route-id="@Model.VolunteerID" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
                     </div>
                 </div>
             </div>

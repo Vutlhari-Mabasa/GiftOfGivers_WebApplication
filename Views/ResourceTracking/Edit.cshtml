@@ -18,15 +18,6 @@
 
                         <input type="hidden" asp-for="ResourceID" />
 
-                        <div class="mb-3">
-                            <label asp-for="ReliefProjectID" class="form-label fw-bold"></label>
-                            <select asp-for="ReliefProjectID" class="form-select"
-                                    asp-items="@(ViewData["ReliefProjectID"] as SelectList)">
-                                <option value="">-- Select Relief Project --</option>
-                            </select>
-                            <span asp-validation-for="ReliefProjectID" class="text-danger"></span>
-                        </div>
-
                         <div class="row mb-3">
                             <div class="col-md-8">
                                 <label asp-for="Name" class="form-label fw-bold"></label>

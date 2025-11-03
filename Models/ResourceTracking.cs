@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GiftOfGivers_WebApplication.Models
 {
@@ -9,9 +7,6 @@ namespace GiftOfGivers_WebApplication.Models
     {
         [Key]
         public int ResourceID { get; set; }
-
-        [ForeignKey("ReliefProject")]
-        public int ReliefProjectID { get; set; }
 
         [Required(ErrorMessage = "Resource name is required")]
         [Display(Name = "Resource Name")]
@@ -54,10 +49,5 @@ namespace GiftOfGivers_WebApplication.Models
         [Display(Name = "Notes")]
         [DataType(DataType.MultilineText)]
         public string? Notes { get; set; }
-
-        public ReliefProject? ReliefProject { get; set; }
-
-        // 🔗 One Resource → Many Deliveries
-        public ICollection<Delivery> Deliveries { get; set; } = new List<Delivery>();
     }
 }

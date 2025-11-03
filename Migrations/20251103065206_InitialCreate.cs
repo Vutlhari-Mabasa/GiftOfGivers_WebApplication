@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GiftOfGivers_WebApplication.Migrations
 {
     /// <inheritdoc />
-    public partial class AddIdentityToApplication : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,6 +54,35 @@ namespace GiftOfGivers_WebApplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Deliveries",
+                columns: table => new
+                {
+                    DeliveryID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    DeliveredAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Deliveries", x => x.DeliveryID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Donations",
+                columns: table => new
+                {
+                    DonationID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Donations", x => x.DonationID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Donors",
                 columns: table => new
                 {
@@ -78,11 +107,95 @@ namespace GiftOfGivers_WebApplication.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SeverityLevel = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EstimatedAffectedPeople = table.Column<int>(type: "int", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReportedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactInformation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IncidentReports", x => x.IncidentID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ReliefProjects",
+                columns: table => new
+                {
+                    ReliefProjectID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReliefProjects", x => x.ReliefProjectID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ResourceTracking",
+                columns: table => new
+                {
+                    ResourceID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DonatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DonationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Priority = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ResourceTracking", x => x.ResourceID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VolunteerAssignments",
+                columns: table => new
+                {
+                    AssignmentID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HoursContributed = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    AssignedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CompletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VolunteerAssignments", x => x.AssignmentID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VolunteerTasks",
+                columns: table => new
+                {
+                    TaskID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RequiredSkills = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Priority = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    VolunteersNeeded = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VolunteerTasks", x => x.TaskID);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,102 +305,33 @@ namespace GiftOfGivers_WebApplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ReliefProjects",
+                name: "Volunteers",
                 columns: table => new
                 {
-                    ReliefProjectID = table.Column<int>(type: "int", nullable: false)
+                    VolunteerID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IncidentID = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Skills = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AvailableDays = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ReliefProjects", x => x.ReliefProjectID);
+                    table.PrimaryKey("PK_Volunteers", x => x.VolunteerID);
                     table.ForeignKey(
-                        name: "FK_ReliefProjects_IncidentReports_IncidentID",
-                        column: x => x.IncidentID,
-                        principalTable: "IncidentReports",
-                        principalColumn: "IncidentID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Donations",
-                columns: table => new
-                {
-                    DonationID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DonorID = table.Column<int>(type: "int", nullable: false),
-                    ReliefProjectID = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Donations", x => x.DonationID);
-                    table.ForeignKey(
-                        name: "FK_Donations_Donors_DonorID",
-                        column: x => x.DonorID,
-                        principalTable: "Donors",
-                        principalColumn: "DonorID",
+                        name: "FK_Volunteers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Donations_ReliefProjects_ReliefProjectID",
-                        column: x => x.ReliefProjectID,
-                        principalTable: "ReliefProjects",
-                        principalColumn: "ReliefProjectID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ResourceTracking",
-                columns: table => new
-                {
-                    ResourceID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ReliefProjectID = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ResourceTracking", x => x.ResourceID);
-                    table.ForeignKey(
-                        name: "FK_ResourceTracking_ReliefProjects_ReliefProjectID",
-                        column: x => x.ReliefProjectID,
-                        principalTable: "ReliefProjects",
-                        principalColumn: "ReliefProjectID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Deliveries",
-                columns: table => new
-                {
-                    DeliveryID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ReliefProjectID = table.Column<int>(type: "int", nullable: false),
-                    ResourceID = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    DeliveredAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Deliveries", x => x.DeliveryID);
-                    table.ForeignKey(
-                        name: "FK_Deliveries_ReliefProjects_ReliefProjectID",
-                        column: x => x.ReliefProjectID,
-                        principalTable: "ReliefProjects",
-                        principalColumn: "ReliefProjectID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Deliveries_ResourceTracking_ResourceID",
-                        column: x => x.ResourceID,
-                        principalTable: "ResourceTracking",
-                        principalColumn: "ResourceID",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -330,34 +374,9 @@ namespace GiftOfGivers_WebApplication.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Deliveries_ReliefProjectID",
-                table: "Deliveries",
-                column: "ReliefProjectID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Deliveries_ResourceID",
-                table: "Deliveries",
-                column: "ResourceID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Donations_DonorID",
-                table: "Donations",
-                column: "DonorID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Donations_ReliefProjectID",
-                table: "Donations",
-                column: "ReliefProjectID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReliefProjects_IncidentID",
-                table: "ReliefProjects",
-                column: "IncidentID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ResourceTracking_ReliefProjectID",
-                table: "ResourceTracking",
-                column: "ReliefProjectID");
+                name: "IX_Volunteers_UserId",
+                table: "Volunteers",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -385,22 +404,31 @@ namespace GiftOfGivers_WebApplication.Migrations
                 name: "Donations");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "ResourceTracking");
-
-            migrationBuilder.DropTable(
                 name: "Donors");
+
+            migrationBuilder.DropTable(
+                name: "IncidentReports");
 
             migrationBuilder.DropTable(
                 name: "ReliefProjects");
 
             migrationBuilder.DropTable(
-                name: "IncidentReports");
+                name: "ResourceTracking");
+
+            migrationBuilder.DropTable(
+                name: "VolunteerAssignments");
+
+            migrationBuilder.DropTable(
+                name: "Volunteers");
+
+            migrationBuilder.DropTable(
+                name: "VolunteerTasks");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

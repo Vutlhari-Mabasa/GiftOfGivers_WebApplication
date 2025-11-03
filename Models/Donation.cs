@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GiftOfGivers_WebApplication.Models
 {
@@ -9,12 +8,6 @@ namespace GiftOfGivers_WebApplication.Models
         [Key]
         public int DonationID { get; set; }
 
-        [ForeignKey("Donor")]
-        public int DonorID { get; set; }
-
-        [ForeignKey("ReliefProject")]
-        public int ReliefProjectID { get; set; }
-
         [Required]
         public decimal Amount { get; set; }
 
@@ -22,8 +15,5 @@ namespace GiftOfGivers_WebApplication.Models
 
         [Required]
         public DateTime Date { get; set; }
-
-        public Donor Donor { get; set; }
-        public ReliefProject ReliefProject { get; set; }
     }
 }

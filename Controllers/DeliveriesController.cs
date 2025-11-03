@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GiftOfGivers_WebApplication.Data;
 using GiftOfGivers_WebApplication.Models;
@@ -24,8 +23,7 @@ namespace GiftOfGivers_WebApplication.Controllers
         // GET: Deliveries
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Deliveries.Include(d => d.ReliefProject).Include(d => d.ResourceTracking);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.Deliveries.ToListAsync());
         }
 
         // GET: Deliveries/Details/5
@@ -36,10 +34,7 @@ namespace GiftOfGivers_WebApplication.Controllers
                 return NotFound();
             }
 
-            var delivery = await _context.Deliveries
-                .Include(d => d.ReliefProject)
-                .Include(d => d.ResourceTracking)
-                .FirstOrDefaultAsync(m => m.DeliveryID == id);
+            var delivery = await _context.Deliveries.FindAsync(id);
             if (delivery == null)
             {
                 return NotFound();
@@ -51,15 +46,13 @@ namespace GiftOfGivers_WebApplication.Controllers
         // GET: Deliveries/Create
         public IActionResult Create()
         {
-            ViewData["ReliefProjectID"] = new SelectList(_context.ReliefProjects, "ReliefProjectID", "Name");
-            ViewData["ResourceID"] = new SelectList(_context.ResourceTracking, "ResourceID", "Name");
             return View();
         }
 
         // POST: Deliveries/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DeliveryID,ReliefProjectID,ResourceID,Quantity,DeliveredAt")] Delivery delivery)
+        public async Task<IActionResult> Create([Bind("DeliveryID,Quantity,DeliveredAt")] Delivery delivery)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +60,6 @@ namespace GiftOfGivers_WebApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ReliefProjectID"] = new SelectList(_context.ReliefProjects, "ReliefProjectID", "Name", delivery.ReliefProjectID);
-            ViewData["ResourceID"] = new SelectList(_context.ResourceTracking, "ResourceID", "Name", delivery.ResourceID);
             return View(delivery);
         }
 
@@ -86,8 +77,6 @@ namespace GiftOfGivers_WebApplication.Controllers
             {
                 return NotFound();
             }
-            ViewData["ReliefProjectID"] = new SelectList(_context.ReliefProjects, "ReliefProjectID", "Name", delivery.ReliefProjectID);
-            ViewData["ResourceID"] = new SelectList(_context.ResourceTracking, "ResourceID", "Name", delivery.ResourceID);
             return View(delivery);
         }
 
@@ -96,7 +85,7 @@ namespace GiftOfGivers_WebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DeliveryID,ReliefProjectID,ResourceID,Quantity,DeliveredAt")] Delivery delivery)
+        public async Task<IActionResult> Edit(int id, [Bind("DeliveryID,Quantity,DeliveredAt")] Delivery delivery)
         {
             if (id != delivery.DeliveryID)
             {
@@ -123,8 +112,6 @@ namespace GiftOfGivers_WebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ReliefProjectID"] = new SelectList(_context.ReliefProjects, "ReliefProjectID", "Name", delivery.ReliefProjectID);
-            ViewData["ResourceID"] = new SelectList(_context.ResourceTracking, "ResourceID", "Name", delivery.ResourceID);
             return View(delivery);
         }
 
@@ -136,10 +123,7 @@ namespace GiftOfGivers_WebApplication.Controllers
                 return NotFound();
             }
 
-            var delivery = await _context.Deliveries
-                .Include(d => d.ReliefProject)
-                .Include(d => d.ResourceTracking)
-                .FirstOrDefaultAsync(m => m.DeliveryID == id);
+            var delivery = await _context.Deliveries.FindAsync(id);
             if (delivery == null)
             {
                 return NotFound();

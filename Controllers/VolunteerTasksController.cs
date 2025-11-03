@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GiftOfGivers_WebApplication.Data;
 using GiftOfGivers_WebApplication.Models;
@@ -24,8 +23,7 @@ namespace GiftOfGivers_WebApplication.Controllers
         // GET: VolunteerTasks
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.VolunteerTasks.Include(v => v.ReliefProject);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.VolunteerTasks.ToListAsync());
         }
 
         // GET: VolunteerTasks/Details/5
@@ -36,12 +34,7 @@ namespace GiftOfGivers_WebApplication.Controllers
                 return NotFound();
             }
 
-            var volunteerTask = await _context.VolunteerTasks
-                .Include(v => v.ReliefProject)
-                .Include(v => v.VolunteerAssignments)
-                    .ThenInclude(va => va.Volunteer)
-                .FirstOrDefaultAsync(m => m.TaskID == id);
-
+            var volunteerTask = await _context.VolunteerTasks.FindAsync(id);
             if (volunteerTask == null)
             {
                 return NotFound();
@@ -53,14 +46,13 @@ namespace GiftOfGivers_WebApplication.Controllers
         // GET: VolunteerTasks/Create
         public IActionResult Create()
         {
-            ViewData["ReliefProjectID"] = new SelectList(_context.ReliefProjects, "ReliefProjectID", "Name");
             return View();
         }
 
         // POST: VolunteerTasks/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Description,RequiredSkills,ReliefProjectID,Priority,Location,StartDate,EndDate,VolunteersNeeded")] VolunteerTask volunteerTask)
+        public async Task<IActionResult> Create([Bind("TaskID,Title,Description,RequiredSkills,Priority,Location,StartDate,EndDate,VolunteersNeeded")] VolunteerTask volunteerTask)
         {
             if (ModelState.IsValid)
             {
@@ -70,7 +62,6 @@ namespace GiftOfGivers_WebApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ReliefProjectID"] = new SelectList(_context.ReliefProjects, "ReliefProjectID", "Name", volunteerTask.ReliefProjectID);
             return View(volunteerTask);
         }
 
@@ -87,14 +78,13 @@ namespace GiftOfGivers_WebApplication.Controllers
             {
                 return NotFound();
             }
-            ViewData["ReliefProjectID"] = new SelectList(_context.ReliefProjects, "ReliefProjectID", "Name", volunteerTask.ReliefProjectID);
             return View(volunteerTask);
         }
 
         // POST: VolunteerTasks/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TaskID,Title,Description,RequiredSkills,ReliefProjectID,Priority,Status,Location,StartDate,EndDate,VolunteersNeeded")] VolunteerTask volunteerTask)
+        public async Task<IActionResult> Edit(int id, [Bind("TaskID,Title,Description,RequiredSkills,Priority,Status,Location,StartDate,EndDate,VolunteersNeeded")] VolunteerTask volunteerTask)
         {
             if (id != volunteerTask.TaskID)
             {
@@ -121,7 +111,6 @@ namespace GiftOfGivers_WebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ReliefProjectID"] = new SelectList(_context.ReliefProjects, "ReliefProjectID", "Name", volunteerTask.ReliefProjectID);
             return View(volunteerTask);
         }
 
@@ -133,10 +122,7 @@ namespace GiftOfGivers_WebApplication.Controllers
                 return NotFound();
             }
 
-            var volunteerTask = await _context.VolunteerTasks
-                .Include(v => v.ReliefProject)
-                .FirstOrDefaultAsync(m => m.TaskID == id);
-
+            var volunteerTask = await _context.VolunteerTasks.FindAsync(id);
             if (volunteerTask == null)
             {
                 return NotFound();
@@ -174,14 +160,13 @@ namespace GiftOfGivers_WebApplication.Controllers
                 return NotFound();
             }
 
-            ViewData["VolunteerID"] = new SelectList(_context.Volunteers, "VolunteerID", "FullName");
-            return View(new VolunteerAssignment { TaskID = id.Value });
+            return View(new VolunteerAssignment { Status = "Assigned" });
         }
 
         // POST: VolunteerTasks/Assign/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Assign(int id, [Bind("VolunteerID,TaskID,Notes")] VolunteerAssignment assignment)
+        public async Task<IActionResult> Assign(int id, [Bind("Status,Notes")] VolunteerAssignment assignment)
         {
             if (ModelState.IsValid)
             {
@@ -192,7 +177,6 @@ namespace GiftOfGivers_WebApplication.Controllers
                 return RedirectToAction("Details", new { id = id });
             }
 
-            ViewData["VolunteerID"] = new SelectList(_context.Volunteers, "VolunteerID", "FullName");
             return View(assignment);
         }
 
@@ -202,4 +186,3 @@ namespace GiftOfGivers_WebApplication.Controllers
         }
     }
 }
-

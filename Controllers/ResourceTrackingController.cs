@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GiftOfGivers_WebApplication.Data;
 using GiftOfGivers_WebApplication.Models;
@@ -24,8 +23,7 @@ namespace GiftOfGivers_WebApplication.Controllers
         // GET: ResourceTracking
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ResourceTracking.Include(r => r.ReliefProject);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.ResourceTracking.ToListAsync());
         }
 
         // GET: ResourceTracking/Details/5
@@ -36,9 +34,7 @@ namespace GiftOfGivers_WebApplication.Controllers
                 return NotFound();
             }
 
-            var resourceTracking = await _context.ResourceTracking
-                .Include(r => r.ReliefProject)
-                .FirstOrDefaultAsync(m => m.ResourceID == id);
+            var resourceTracking = await _context.ResourceTracking.FindAsync(id);
             if (resourceTracking == null)
             {
                 return NotFound();
@@ -50,14 +46,13 @@ namespace GiftOfGivers_WebApplication.Controllers
         // GET: ResourceTracking/Create
         public IActionResult Create()
         {
-            ViewData["ReliefProjectID"] = new SelectList(_context.ReliefProjects, "ReliefProjectID", "Name");
             return View();
         }
 
         // POST: ResourceTracking/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReliefProjectID,Name,Quantity,Unit,Category,Description,DonatedBy,DonationDate,Priority,Location,ExpiryDate,Notes")] ResourceTracking resourceTracking)
+        public async Task<IActionResult> Create([Bind("ResourceID,Name,Quantity,Unit,Category,Description,DonatedBy,DonationDate,Priority,Location,ExpiryDate,Notes")] ResourceTracking resourceTracking)
         {
             if (ModelState.IsValid)
             {
@@ -66,7 +61,6 @@ namespace GiftOfGivers_WebApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ReliefProjectID"] = new SelectList(_context.ReliefProjects, "ReliefProjectID", "Name", resourceTracking.ReliefProjectID);
             return View(resourceTracking);
         }
 
@@ -85,7 +79,6 @@ namespace GiftOfGivers_WebApplication.Controllers
             {
                 return NotFound();
             }
-            ViewData["ReliefProjectID"] = new SelectList(_context.ReliefProjects, "ReliefProjectID", "Name", resourceTracking.ReliefProjectID);
             return View(resourceTracking);
         }
 
@@ -94,7 +87,7 @@ namespace GiftOfGivers_WebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ResourceID,ReliefProjectID,Name,Quantity,Unit,Category,Description,DonatedBy,DonationDate,Priority,Location,ExpiryDate,Notes,Status")] ResourceTracking resourceTracking)
+        public async Task<IActionResult> Edit(int id, [Bind("ResourceID,Name,Quantity,Unit,Category,Description,DonatedBy,DonationDate,Priority,Location,ExpiryDate,Notes,Status")] ResourceTracking resourceTracking)
         {
             if (id != resourceTracking.ResourceID)
             {
@@ -121,7 +114,6 @@ namespace GiftOfGivers_WebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ReliefProjectID"] = new SelectList(_context.ReliefProjects, "ReliefProjectID", "Name", resourceTracking.ReliefProjectID);
             return View(resourceTracking);
         }
 
@@ -133,9 +125,7 @@ namespace GiftOfGivers_WebApplication.Controllers
                 return NotFound();
             }
 
-            var resourceTracking = await _context.ResourceTracking
-                .Include(r => r.ReliefProject)
-                .FirstOrDefaultAsync(m => m.ResourceID == id);
+            var resourceTracking = await _context.ResourceTracking.FindAsync(id);
             if (resourceTracking == null)
             {
                 return NotFound();

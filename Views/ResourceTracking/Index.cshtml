@@ -29,7 +29,6 @@
                             <th>Donated By</th>
                             <th>Date</th>
                             <th>Status</th>
-                            <th>Project</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -55,7 +54,6 @@
                                         @item.Status
                                     </span>
                                 </td>
-                                <td>@item.ReliefProject?.Name</td>
                                 <td>
                                     <a asp-action="Details" asp-route-id="@item.ResourceID" class="btn btn-sm btn-info" title="Details">
                                         <i class="bi bi-eye"></i>

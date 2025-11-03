@@ -20,15 +20,6 @@
                         <input asp-for="CreatedAt" type="hidden" />
 
                         <div class="mb-3">
-                            <label asp-for="ReliefProjectID" class="form-label fw-bold"></label>
-                            <select asp-for="ReliefProjectID" class="form-select"
-                                    asp-items="@(ViewData["ReliefProjectID"] as SelectList)">
-                                <option value="">-- Select Relief Project --</option>
-                            </select>
-                            <span asp-validation-for="ReliefProjectID" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
                             <label asp-for="Title" class="form-label fw-bold"></label>
                             <input asp-for="Title" class="form-control" />
                             <span asp-validation-for="Title" class="text-danger"></span>

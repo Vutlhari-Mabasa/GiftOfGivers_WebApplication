@@ -20,9 +20,6 @@
                         <dt class="col-sm-3">Description</dt>
                         <dd class="col-sm-9">@Model.Description</dd>
 
-                        <dt class="col-sm-3">Relief Project</dt>
-                        <dd class="col-sm-9">@Model.ReliefProject?.Name</dd>
-
                         <dt class="col-sm-3">Priority</dt>
                         <dd class="col-sm-9">
                             <span class="badge @(Model.Priority == "High" ? "bg-danger" : Model.Priority == "Medium" ? "bg-warning" : "bg-info")">
@@ -54,22 +51,6 @@
 
                         <dt class="col-sm-3">Created</dt>
                         <dd class="col-sm-9">@Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")</dd>
-
-                        @if (Model.VolunteerAssignments != null && Model.VolunteerAssignments.Any())
-                        {
-                            <dt class="col-sm-3">Assigned Volunteers</dt>
-                            <dd class="col-sm-9">
-                                <ul class="list-unstyled">
-                                    @foreach (var assignment in Model.VolunteerAssignments)
-                                    {
-                                        <li>
-                                            <i class="bi bi-person-circle"></i> @assignment.Volunteer?.FullName
-                                            <span class="badge bg-secondary">@assignment.Status</span>
-                                        </li>
-                                    }
-                                </ul>
-                            </dd>
-                        }
                     </dl>
 
                     <div class="mt-4">

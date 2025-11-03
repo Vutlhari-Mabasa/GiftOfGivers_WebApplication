@@ -71,22 +71,6 @@
                                 }
                             </dl>
                         </div>
-                        @if (Model.ReliefProjects != null && Model.ReliefProjects.Any())
-                        {
-                            <div class="col-md-6">
-                                <h5>Related Relief Projects</h5>
-                                <ul class="list-group">
-                                    @foreach (var project in Model.ReliefProjects)
-                                    {
-                                        <li class="list-group-item">
-                                            <strong>@project.Name</strong>
-                                            <span class="badge bg-info">@project.Status</span>
-                                            <br><a href="@Url.Action("Details", "ReliefProjects", new { id = project.ReliefProjectID })" class="btn btn-sm btn-outline-primary mt-2">View Project</a>
-                                        </li>
-                                    }
-                                </ul>
-                            </div>
-                        }
                     </div>
 
                     <div class="mt-4">

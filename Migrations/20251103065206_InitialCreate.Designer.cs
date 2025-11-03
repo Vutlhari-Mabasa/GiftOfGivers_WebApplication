@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GiftOfGivers_WebApplication.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251103054738_AddIdentityToApplication")]
-    partial class AddIdentityToApplication
+    [Migration("20251103065206_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -115,17 +115,7 @@ namespace GiftOfGivers_WebApplication.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("ReliefProjectID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ResourceID")
-                        .HasColumnType("int");
-
                     b.HasKey("DeliveryID");
-
-                    b.HasIndex("ReliefProjectID");
-
-                    b.HasIndex("ResourceID");
 
                     b.ToTable("Deliveries");
                 });
@@ -144,21 +134,11 @@ namespace GiftOfGivers_WebApplication.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DonorID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReliefProjectID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("DonationID");
-
-                    b.HasIndex("DonorID");
-
-                    b.HasIndex("ReliefProjectID");
 
                     b.ToTable("Donations");
                 });
@@ -199,6 +179,19 @@ namespace GiftOfGivers_WebApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IncidentID"));
 
+                    b.Property<string>("ContactInformation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("EstimatedAffectedPeople")
+                        .HasColumnType("int");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -207,8 +200,19 @@ namespace GiftOfGivers_WebApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ReportedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SeverityLevel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -227,9 +231,6 @@ namespace GiftOfGivers_WebApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReliefProjectID"));
 
-                    b.Property<int?>("IncidentID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -239,8 +240,6 @@ namespace GiftOfGivers_WebApplication.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ReliefProjectID");
-
-                    b.HasIndex("IncidentID");
 
                     b.ToTable("ReliefProjects");
                 });
@@ -253,15 +252,42 @@ namespace GiftOfGivers_WebApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResourceID"));
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DonatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DonationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Priority")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("ReliefProjectID")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Unit")
                         .IsRequired()
@@ -269,9 +295,140 @@ namespace GiftOfGivers_WebApplication.Migrations
 
                     b.HasKey("ResourceID");
 
-                    b.HasIndex("ReliefProjectID");
-
                     b.ToTable("ResourceTracking");
+                });
+
+            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.Volunteer", b =>
+                {
+                    b.Property<int>("VolunteerID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VolunteerID"));
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AvailableDays")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Skills")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("VolunteerID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Volunteers");
+                });
+
+            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.VolunteerAssignment", b =>
+                {
+                    b.Property<int>("AssignmentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AssignmentID"));
+
+                    b.Property<DateTime>("AssignedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("CompletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("HoursContributed")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AssignmentID");
+
+                    b.ToTable("VolunteerAssignments");
+                });
+
+            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.VolunteerTask", b =>
+                {
+                    b.Property<int>("TaskID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskID"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RequiredSkills")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VolunteersNeeded")
+                        .HasColumnType("int");
+
+                    b.HasKey("TaskID");
+
+                    b.ToTable("VolunteerTasks");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -407,62 +564,15 @@ namespace GiftOfGivers_WebApplication.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.Delivery", b =>
+            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.Volunteer", b =>
                 {
-                    b.HasOne("GiftOfGivers_WebApplication.Models.ReliefProject", "ReliefProject")
-                        .WithMany("Deliveries")
-                        .HasForeignKey("ReliefProjectID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("GiftOfGivers_WebApplication.Models.ResourceTracking", "ResourceTracking")
-                        .WithMany("Deliveries")
-                        .HasForeignKey("ResourceID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ReliefProject");
-
-                    b.Navigation("ResourceTracking");
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.Donation", b =>
-                {
-                    b.HasOne("GiftOfGivers_WebApplication.Models.Donor", "Donor")
-                        .WithMany("Donations")
-                        .HasForeignKey("DonorID")
+                    b.HasOne("GiftOfGivers_WebApplication.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GiftOfGivers_WebApplication.Models.ReliefProject", "ReliefProject")
-                        .WithMany("Donations")
-                        .HasForeignKey("ReliefProjectID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Donor");
-
-                    b.Navigation("ReliefProject");
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.ReliefProject", b =>
-                {
-                    b.HasOne("GiftOfGivers_WebApplication.Models.IncidentReport", "IncidentReport")
-                        .WithMany("ReliefProjects")
-                        .HasForeignKey("IncidentID");
-
-                    b.Navigation("IncidentReport");
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.ResourceTracking", b =>
-                {
-                    b.HasOne("GiftOfGivers_WebApplication.Models.ReliefProject", "ReliefProject")
-                        .WithMany("Resources")
-                        .HasForeignKey("ReliefProjectID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ReliefProject");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -514,30 +624,6 @@ namespace GiftOfGivers_WebApplication.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.Donor", b =>
-                {
-                    b.Navigation("Donations");
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.IncidentReport", b =>
-                {
-                    b.Navigation("ReliefProjects");
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.ReliefProject", b =>
-                {
-                    b.Navigation("Deliveries");
-
-                    b.Navigation("Donations");
-
-                    b.Navigation("Resources");
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.ResourceTracking", b =>
-                {
-                    b.Navigation("Deliveries");
                 });
 #pragma warning restore 612, 618
         }

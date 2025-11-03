@@ -61,9 +61,6 @@ namespace GiftOfGivers_WebApplication.Models
         // Computed property
         [NotMapped]
         public string FullName => $"{FirstName} {LastName}";
-
-        // One Volunteer → Many Volunteer Assignments
-        public ICollection<VolunteerAssignment> VolunteerAssignments { get; set; } = new List<VolunteerAssignment>();
     }
 
     public class VolunteerTask
@@ -81,10 +78,6 @@ namespace GiftOfGivers_WebApplication.Models
 
         [Display(Name = "Required Skills")]
         public string? RequiredSkills { get; set; }
-
-        [ForeignKey("ReliefProject")]
-        public int ReliefProjectID { get; set; }
-        public ReliefProject? ReliefProject { get; set; }
 
         [Display(Name = "Priority")]
         public string Priority { get; set; } = "Medium";
@@ -108,23 +101,12 @@ namespace GiftOfGivers_WebApplication.Models
 
         [Display(Name = "Volunteers Needed")]
         public int VolunteersNeeded { get; set; } = 1;
-
-        // One Task → Many Assignments
-        public ICollection<VolunteerAssignment> VolunteerAssignments { get; set; } = new List<VolunteerAssignment>();
     }
 
     public class VolunteerAssignment
     {
         [Key]
         public int AssignmentID { get; set; }
-
-        [ForeignKey("Volunteer")]
-        public int VolunteerID { get; set; }
-        public Volunteer? Volunteer { get; set; }
-
-        [ForeignKey("VolunteerTask")]
-        public int TaskID { get; set; }
-        public VolunteerTask? VolunteerTask { get; set; }
 
         [Display(Name = "Status")]
         public string Status { get; set; } = "Assigned";

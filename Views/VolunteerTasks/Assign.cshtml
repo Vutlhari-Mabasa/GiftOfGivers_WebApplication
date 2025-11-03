@@ -16,17 +16,6 @@
                     <form asp-action="Assign" method="post">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-                        <input asp-for="TaskID" type="hidden" />
-
-                        <div class="mb-3">
-                            <label asp-for="VolunteerID" class="form-label fw-bold"></label>
-                            <select asp-for="VolunteerID" class="form-select"
-                                    asp-items="@(ViewData["VolunteerID"] as SelectList)">
-                                <option value="">-- Select Volunteer --</option>
-                            </select>
-                            <span asp-validation-for="VolunteerID" class="text-danger"></span>
-                        </div>
-
                         <div class="mb-3">
                             <label asp-for="Notes" class="form-label fw-bold"></label>
                             <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Assignment notes..."></textarea>
@@ -35,9 +24,9 @@
 
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-success btn-lg">
-                                <i class="bi bi-check-circle"></i> Assign Volunteer
+                                <i class="bi bi-check-circle"></i> Create Assignment
                             </button>
-                            <a asp-action="Details" asp-route-id="@Model.TaskID" class="btn btn-outline-secondary">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
                                 <i class="bi bi-x-circle"></i> Cancel
                             </a>
                         </div>

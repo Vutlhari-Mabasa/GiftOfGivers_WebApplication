@@ -112,17 +112,7 @@ namespace GiftOfGivers_WebApplication.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("ReliefProjectID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ResourceID")
-                        .HasColumnType("int");
-
                     b.HasKey("DeliveryID");
-
-                    b.HasIndex("ReliefProjectID");
-
-                    b.HasIndex("ResourceID");
 
                     b.ToTable("Deliveries");
                 });
@@ -141,21 +131,11 @@ namespace GiftOfGivers_WebApplication.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DonorID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReliefProjectID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("DonationID");
-
-                    b.HasIndex("DonorID");
-
-                    b.HasIndex("ReliefProjectID");
 
                     b.ToTable("Donations");
                 });
@@ -248,9 +228,6 @@ namespace GiftOfGivers_WebApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReliefProjectID"));
 
-                    b.Property<int?>("IncidentID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -260,8 +237,6 @@ namespace GiftOfGivers_WebApplication.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ReliefProjectID");
-
-                    b.HasIndex("IncidentID");
 
                     b.ToTable("ReliefProjects");
                 });
@@ -307,9 +282,6 @@ namespace GiftOfGivers_WebApplication.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("ReliefProjectID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -319,8 +291,6 @@ namespace GiftOfGivers_WebApplication.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ResourceID");
-
-                    b.HasIndex("ReliefProjectID");
 
                     b.ToTable("ResourceTracking");
                 });
@@ -406,17 +376,7 @@ namespace GiftOfGivers_WebApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TaskID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VolunteerID")
-                        .HasColumnType("int");
-
                     b.HasKey("AssignmentID");
-
-                    b.HasIndex("TaskID");
-
-                    b.HasIndex("VolunteerID");
 
                     b.ToTable("VolunteerAssignments");
                 });
@@ -446,9 +406,6 @@ namespace GiftOfGivers_WebApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ReliefProjectID")
-                        .HasColumnType("int");
-
                     b.Property<string>("RequiredSkills")
                         .HasColumnType("nvarchar(max)");
 
@@ -467,8 +424,6 @@ namespace GiftOfGivers_WebApplication.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("TaskID");
-
-                    b.HasIndex("ReliefProjectID");
 
                     b.ToTable("VolunteerTasks");
                 });
@@ -606,64 +561,6 @@ namespace GiftOfGivers_WebApplication.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.Delivery", b =>
-                {
-                    b.HasOne("GiftOfGivers_WebApplication.Models.ReliefProject", "ReliefProject")
-                        .WithMany("Deliveries")
-                        .HasForeignKey("ReliefProjectID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("GiftOfGivers_WebApplication.Models.ResourceTracking", "ResourceTracking")
-                        .WithMany("Deliveries")
-                        .HasForeignKey("ResourceID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ReliefProject");
-
-                    b.Navigation("ResourceTracking");
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.Donation", b =>
-                {
-                    b.HasOne("GiftOfGivers_WebApplication.Models.Donor", "Donor")
-                        .WithMany("Donations")
-                        .HasForeignKey("DonorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GiftOfGivers_WebApplication.Models.ReliefProject", "ReliefProject")
-                        .WithMany("Donations")
-                        .HasForeignKey("ReliefProjectID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Donor");
-
-                    b.Navigation("ReliefProject");
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.ReliefProject", b =>
-                {
-                    b.HasOne("GiftOfGivers_WebApplication.Models.IncidentReport", "IncidentReport")
-                        .WithMany("ReliefProjects")
-                        .HasForeignKey("IncidentID");
-
-                    b.Navigation("IncidentReport");
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.ResourceTracking", b =>
-                {
-                    b.HasOne("GiftOfGivers_WebApplication.Models.ReliefProject", "ReliefProject")
-                        .WithMany("Resources")
-                        .HasForeignKey("ReliefProjectID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ReliefProject");
-                });
-
             modelBuilder.Entity("GiftOfGivers_WebApplication.Models.Volunteer", b =>
                 {
                     b.HasOne("GiftOfGivers_WebApplication.Models.ApplicationUser", "User")
@@ -673,36 +570,6 @@ namespace GiftOfGivers_WebApplication.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.VolunteerAssignment", b =>
-                {
-                    b.HasOne("GiftOfGivers_WebApplication.Models.VolunteerTask", "VolunteerTask")
-                        .WithMany("VolunteerAssignments")
-                        .HasForeignKey("TaskID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GiftOfGivers_WebApplication.Models.Volunteer", "Volunteer")
-                        .WithMany("VolunteerAssignments")
-                        .HasForeignKey("VolunteerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Volunteer");
-
-                    b.Navigation("VolunteerTask");
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.VolunteerTask", b =>
-                {
-                    b.HasOne("GiftOfGivers_WebApplication.Models.ReliefProject", "ReliefProject")
-                        .WithMany("VolunteerTasks")
-                        .HasForeignKey("ReliefProjectID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ReliefProject");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -754,42 +621,6 @@ namespace GiftOfGivers_WebApplication.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.Donor", b =>
-                {
-                    b.Navigation("Donations");
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.IncidentReport", b =>
-                {
-                    b.Navigation("ReliefProjects");
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.ReliefProject", b =>
-                {
-                    b.Navigation("Deliveries");
-
-                    b.Navigation("Donations");
-
-                    b.Navigation("Resources");
-
-                    b.Navigation("VolunteerTasks");
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.ResourceTracking", b =>
-                {
-                    b.Navigation("Deliveries");
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.Volunteer", b =>
-                {
-                    b.Navigation("VolunteerAssignments");
-                });
-
-            modelBuilder.Entity("GiftOfGivers_WebApplication.Models.VolunteerTask", b =>
-                {
-                    b.Navigation("VolunteerAssignments");
                 });
 #pragma warning restore 612, 618
         }

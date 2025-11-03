@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GiftOfGivers_WebApplication.Data;
 using GiftOfGivers_WebApplication.Models;
@@ -24,8 +23,7 @@ namespace GiftOfGivers_WebApplication.Controllers
         // GET: Donations
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Donations.Include(d => d.Donor).Include(d => d.ReliefProject);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.Donations.ToListAsync());
         }
 
         // GET: Donations/Details/5
@@ -36,10 +34,7 @@ namespace GiftOfGivers_WebApplication.Controllers
                 return NotFound();
             }
 
-            var donation = await _context.Donations
-                .Include(d => d.Donor)
-                .Include(d => d.ReliefProject)
-                .FirstOrDefaultAsync(m => m.DonationID == id);
+            var donation = await _context.Donations.FindAsync(id);
             if (donation == null)
             {
                 return NotFound();
@@ -51,15 +46,13 @@ namespace GiftOfGivers_WebApplication.Controllers
         // GET: Donations/Create
         public IActionResult Create()
         {
-            ViewData["DonorID"] = new SelectList(_context.Donors, "DonorID", "Name");
-            ViewData["ReliefProjectID"] = new SelectList(_context.ReliefProjects, "ReliefProjectID", "Name");
             return View();
         }
 
         // POST: Donations/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DonationID,DonorID,ReliefProjectID,Amount,Type,Date")] Donation donation)
+        public async Task<IActionResult> Create([Bind("DonationID,Amount,Type,Date")] Donation donation)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +60,6 @@ namespace GiftOfGivers_WebApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DonorID"] = new SelectList(_context.Donors, "DonorID", "Name", donation.DonorID);
-            ViewData["ReliefProjectID"] = new SelectList(_context.ReliefProjects, "ReliefProjectID", "Name", donation.ReliefProjectID);
             return View(donation);
         }
 
@@ -87,8 +78,6 @@ namespace GiftOfGivers_WebApplication.Controllers
             {
                 return NotFound();
             }
-            ViewData["DonorID"] = new SelectList(_context.Donors, "DonorID", "Email", donation.DonorID);
-            ViewData["ReliefProjectID"] = new SelectList(_context.ReliefProjects, "ReliefProjectID", "Name", donation.ReliefProjectID);
             return View(donation);
         }
 
@@ -97,7 +86,7 @@ namespace GiftOfGivers_WebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DonationID,DonorID,ReliefProjectID,Amount,Type,Date")] Donation donation)
+        public async Task<IActionResult> Edit(int id, [Bind("DonationID,Amount,Type,Date")] Donation donation)
         {
             if (id != donation.DonationID)
             {
@@ -124,8 +113,6 @@ namespace GiftOfGivers_WebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DonorID"] = new SelectList(_context.Donors, "DonorID", "Email", donation.DonorID);
-            ViewData["ReliefProjectID"] = new SelectList(_context.ReliefProjects, "ReliefProjectID", "Name", donation.ReliefProjectID);
             return View(donation);
         }
 
@@ -137,10 +124,7 @@ namespace GiftOfGivers_WebApplication.Controllers
                 return NotFound();
             }
 
-            var donation = await _context.Donations
-                .Include(d => d.Donor)
-                .Include(d => d.ReliefProject)
-                .FirstOrDefaultAsync(m => m.DonationID == id);
+            var donation = await _context.Donations.FindAsync(id);
             if (donation == null)
             {
                 return NotFound();

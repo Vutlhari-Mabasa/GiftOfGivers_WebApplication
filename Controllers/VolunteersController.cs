@@ -40,8 +40,6 @@ namespace GiftOfGivers_WebApplication.Controllers
 
             var volunteer = await _context.Volunteers
                 .Include(v => v.User)
-                .Include(v => v.VolunteerAssignments)
-                    .ThenInclude(va => va.VolunteerTask)
                 .FirstOrDefaultAsync(m => m.VolunteerID == id);
 
             if (volunteer == null)
@@ -125,15 +123,11 @@ namespace GiftOfGivers_WebApplication.Controllers
             }
 
             var assignments = await _context.VolunteerAssignments
-                .Include(va => va.VolunteerTask)
-                    .ThenInclude(vt => vt.ReliefProject)
-                .Where(va => va.VolunteerID == volunteer.VolunteerID)
                 .OrderByDescending(va => va.AssignedDate)
                 .Take(10)
                 .ToListAsync();
 
             var openTasks = await _context.VolunteerTasks
-                .Include(vt => vt.ReliefProject)
                 .Where(vt => vt.Status == "Open")
                 .OrderByDescending(vt => vt.CreatedAt)
                 .Take(10)
@@ -202,10 +196,7 @@ namespace GiftOfGivers_WebApplication.Controllers
                 return NotFound();
             }
 
-            var volunteer = await _context.Volunteers
-                .Include(v => v.User)
-                .FirstOrDefaultAsync(m => m.VolunteerID == id);
-
+            var volunteer = await _context.Volunteers.FindAsync(id);
             if (volunteer == null)
             {
                 return NotFound();
