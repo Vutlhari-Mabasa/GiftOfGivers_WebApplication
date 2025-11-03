@@ -34,7 +34,10 @@ stages:
       - job: BuildJob
         displayName: 'Build, Test, and Publish'
         steps:
-          # Install .NET 8.0 SDK
+          # Explicit checkout (prevents auto-step injection)
+          - checkout: self
+            fetchDepth: 1
+
           - task: UseDotNet@2
             displayName: 'Install .NET 8.0 SDK'
             inputs:
@@ -42,14 +45,12 @@ stages:
               version: '8.0.x'
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
-          # Restore NuGet packages
           - task: DotNetCoreCLI@2
             displayName: 'Restore NuGet Packages'
             inputs:
               command: 'restore'
               projects: '**/*.sln'
 
-          # Build the solution
           - task: DotNetCoreCLI@2
             displayName: 'Build Solution'
             inputs:
@@ -57,7 +58,6 @@ stages:
               projects: '**/*.sln'
               arguments: '--configuration $(buildConfiguration) --no-restore'
 
-          # Run all tests (75 tests including unit, integration, load, and stress)
           - task: DotNetCoreCLI@2
             displayName: 'Run All Tests'
             inputs:
@@ -66,7 +66,6 @@ stages:
               arguments: '--configuration $(buildConfiguration) --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings --logger trx --results-directory $(Agent.TempDirectory)/test-results'
               publishTestResults: true
 
-          # Publish code coverage
           - task: PublishCodeCoverageResults@1
             displayName: 'Publish Code Coverage'
             inputs:
@@ -75,7 +74,6 @@ stages:
               reportDirectory: '$(Agent.TempDirectory)/**/CodeCoverage'
               failIfCoverageEmpty: false
 
-          # Publish build artifacts
           - task: DotNetCoreCLI@2
             displayName: 'Publish Application'
             inputs:
