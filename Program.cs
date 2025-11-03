@@ -77,3 +77,6 @@ app.MapControllerRoute(
 
 app.Run();
 
+// Make this accessible to integration tests
+public partial class Program { }
+
