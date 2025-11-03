@@ -1,62 +1,94 @@
+# GiftOfGivers Web Application - Azure DevOps Pipeline
+# ASP.NET Core 8.0 CI/CD with Testing and Code Coverage
+
 trigger:
-- main
+  branches:
+    include:
+      - main
+      - develop
+  paths:
+    exclude:
+      - '*.md'
+      - 'README.md'
+      - 'DOCUMENTATION.md'
+
+pr:
+  branches:
+    include:
+      - main
+      - develop
 
 pool:
   vmImage: 'windows-latest'
 
 variables:
-  buildConfiguration: 'Release'
+  - name: buildConfiguration
+    value: 'Release'
+  - name: dotNetFramework
+    value: 'net8.0'
 
-steps:
-# Step 1: Install .NET SDK
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '6.0.x'
-    installationPath: $(Agent.ToolsDirectory)/dotnet
+stages:
+  - stage: BuildAndTest
+    displayName: 'Build and Test'
+    jobs:
+      - job: BuildJob
+        displayName: 'Build, Test, and Publish'
+        steps:
+          # Install .NET 8.0 SDK
+          - task: UseDotNet@2
+            displayName: 'Install .NET 8.0 SDK'
+            inputs:
+              packageType: 'sdk'
+              version: '8.0.x'
+              installationPath: $(Agent.ToolsDirectory)/dotnet
 
-# Step 2: Install NuGet
-- task: NuGetToolInstaller@1
+          # Restore NuGet packages
+          - task: DotNetCoreCLI@2
+            displayName: 'Restore NuGet Packages'
+            inputs:
+              command: 'restore'
+              projects: '**/*.sln'
 
-# Step 3: Restore NuGet packages
-- task: NuGetCommand@2
-  inputs:
-    command: 'restore'
-    restoreSolution: '**/*.sln'
+          # Build the solution
+          - task: DotNetCoreCLI@2
+            displayName: 'Build Solution'
+            inputs:
+              command: 'build'
+              projects: '**/*.sln'
+              arguments: '--configuration $(buildConfiguration) --no-restore'
 
-# Step 4: Build the solution
-- task: VSBuild@1
-  inputs:
-    solution: '**/*.sln'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)"'
-    platform: 'Any CPU'
-    configuration: '$(buildConfiguration)'
+          # Run all tests (75 tests including unit, integration, load, and stress)
+          - task: DotNetCoreCLI@2
+            displayName: 'Run All Tests'
+            inputs:
+              command: 'test'
+              projects: '**/Tests/**/*.csproj'
+              arguments: '--configuration $(buildConfiguration) --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings --logger trx --results-directory $(Agent.TempDirectory)/test-results'
+              publishTestResults: true
 
-# Step 5: Run tests (optional)
-- task: VSTest@2
-  inputs:
-    platform: 'Any CPU'
-    configuration: '$(buildConfiguration)'
+          # Publish code coverage
+          - task: PublishCodeCoverageResults@1
+            displayName: 'Publish Code Coverage'
+            inputs:
+              codeCoverageTool: 'Cobertura'
+              summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+              reportDirectory: '$(Agent.TempDirectory)/**/CodeCoverage'
+              failIfCoverageEmpty: false
 
-# Step 6: Publish build artifacts
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+          # Publish build artifacts
+          - task: DotNetCoreCLI@2
+            displayName: 'Publish Application'
+            inputs:
+              command: 'publish'
+              publishWebProjects: false
+              projects: '**/*.csproj'
+              arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/app --no-build'
+              zipAfterPublish: true
+              modifyOutputPath: false
 
-# Step 7: Deploy to Azure App Service
-- task: AzureWebApp@1
-  inputs:
-    azureSubscription: '<Your-Service-Connection-Name>'
-    appName: '<Your-App-Service-Name>'
-    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
-
-# Step 8: Run EF Core Migrations on SQL Database
-- task: DotNetCoreCLI@2
-  displayName: 'Apply EF Core Migrations'
-  inputs:
-    command: 'custom'
-    projects: '**/*.csproj'
-    custom: 'ef'
-    arguments: 'database update --context ApplicationDbContext --connection "$(SqlConnectionString)"'
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Build Artifacts'
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'

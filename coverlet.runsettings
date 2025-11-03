@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- File for coverage with coverlet.msbuild and ReportGenerator -->
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat code coverage">
+        <Configuration>
+          <Format>json,cobertura,lcov</Format>
+          <Include>[GiftOfGivers_WebApplication]*</Include>
+          <Exclude>[GiftOfGivers_WebApplication.Tests]*</Exclude>
+          <Exclude>[GiftOfGivers_WebApplication.Migrations]*</Exclude>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>
+

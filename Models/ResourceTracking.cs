@@ -13,6 +13,7 @@ namespace GiftOfGivers_WebApplication.Models
         public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Quantity is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1")]
         [Display(Name = "Quantity")]
         public int Quantity { get; set; }
 

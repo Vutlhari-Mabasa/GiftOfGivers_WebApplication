@@ -55,7 +55,8 @@ public class ResourceTrackingTests
         // Arrange
         var resource = new ResourceTracking
         {
-            Name = "Test Resource"
+            Name = "Test Resource",
+            Quantity = 0 // Zero should fail Range validation
         };
 
         // Act
