@@ -1,40 +1,94 @@
 @model IEnumerable<GiftOfGivers_WebApplication.Models.IncidentReport>
 
 @{
-    ViewData["Title"] = "Incident Reports";
+    ViewData["Title"] = "Disaster Incident Reports";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Incident Reports</h1>
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2><i class="bi bi-exclamation-triangle"></i> Disaster Incident Reports</h2>
+        </div>
+        <div class="col-md-4 text-end">
+            <a asp-action="Create" class="btn btn-danger">
+                <i class="bi bi-plus-circle"></i> Report New Incident
+            </a>
+        </div>
+    </div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New Incident</a>
-</p>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Incident</th>
+                            <th>Type</th>
+                            <th>Location</th>
+                            <th>Severity</th>
+                            <th>Status</th>
+                            <th>Start Date</th>
+                            <th>Affected</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@item.Name</strong>
+                                    @if (!string.IsNullOrEmpty(item.Description))
+                                    {
+                                        <br><small class="text-muted">@item.Description</small>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary">@item.Type</span>
+                                </td>
+                                <td>@item.Location</td>
+                                <td>
+                                    <span class="badge @(item.SeverityLevel == "Critical" ? "bg-danger" : item.SeverityLevel == "High" ? "bg-warning" : item.SeverityLevel == "Medium" ? "bg-info" : "bg-secondary")">
+                                        @item.SeverityLevel
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge @(item.Status == "Active" ? "bg-danger" : item.Status == "Resolved" ? "bg-success" : "bg-secondary")">
+                                        @item.Status
+                                    </span>
+                                </td>
+                                <td>@item.StartDate.ToString("MMM dd, yyyy HH:mm")</td>
+                                <td>
+                                    @if (item.EstimatedAffectedPeople.HasValue && item.EstimatedAffectedPeople.Value > 0)
+                                    {
+                                        <strong>@item.EstimatedAffectedPeople.Value</strong> <small>people</small>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@item.IncidentID" class="btn btn-sm btn-info" title="Details">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@item.IncidentID" class="btn btn-sm btn-warning" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.IncidentID" class="btn btn-sm btn-danger" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.First().Name)</th>
-            <th>@Html.DisplayNameFor(model => model.First().Type)</th>
-            <th>@Html.DisplayNameFor(model => model.First().Location)</th>
-            <th>@Html.DisplayNameFor(model => model.First().StartDate)</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Name</td>
-                <td>@item.Type</td>
-                <td>@item.Location</td>
-                <td>@item.StartDate.ToString("yyyy-MM-dd HH:mm")</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.IncidentID" class="btn btn-info btn-sm">Details</a>
-                    <a asp-action="Edit" asp-route-id="@item.IncidentID" class="btn btn-warning btn-sm">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@item.IncidentID" class="btn btn-danger btn-sm">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

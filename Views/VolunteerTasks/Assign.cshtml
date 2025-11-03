@@ -1,0 +1,54 @@
+@model GiftOfGivers_WebApplication.Models.VolunteerAssignment
+
+@{
+    ViewData["Title"] = "Assign Volunteer to Task";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0"><i class="bi bi-person-plus"></i> Assign Volunteer to Task</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Assign" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <input asp-for="TaskID" type="hidden" />
+
+                        <div class="mb-3">
+                            <label asp-for="VolunteerID" class="form-label fw-bold"></label>
+                            <select asp-for="VolunteerID" class="form-select"
+                                    asp-items="@(ViewData["VolunteerID"] as SelectList)">
+                                <option value="">-- Select Volunteer --</option>
+                            </select>
+                            <span asp-validation-for="VolunteerID" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label fw-bold"></label>
+                            <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Assignment notes..."></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-check-circle"></i> Assign Volunteer
+                            </button>
+                            <a asp-action="Details" asp-route-id="@Model.TaskID" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

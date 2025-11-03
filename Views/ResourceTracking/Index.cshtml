@@ -1,42 +1,81 @@
 @model IEnumerable<GiftOfGivers_WebApplication.Models.ResourceTracking>
 
 @{
-    ViewData["Title"] = "Resource Tracking";
+    ViewData["Title"] = "Resource Donations";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Resource Tracking</h1>
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2><i class="bi bi-box"></i> Resource Donations</h2>
+        </div>
+        <div class="col-md-4 text-end">
+            <a asp-action="Create" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Donate Resources
+            </a>
+        </div>
+    </div>
 
-<p>
-    <a asp-action="Create" class="btn btn-success">Create New Resource</a>
-</p>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Resource</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Donated By</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Project</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@item.Name</strong>
+                                    @if (!string.IsNullOrEmpty(item.Description))
+                                    {
+                                        <br><small class="text-muted">@item.Description</small>
+                                    }
+                                </td>
+                                <td><span class="badge bg-secondary">@item.Category</span></td>
+                                <td>
+                                    <strong>@item.Quantity</strong> @item.Unit
+                                </td>
+                                <td>@item.DonatedBy</td>
+                                <td>@item.DonationDate.ToString("MMM dd, yyyy")</td>
+                                <td>
+                                    <span class="badge @(item.Status == "Available" ? "bg-success" : item.Status == "Distributed" ? "bg-info" : "bg-warning")">
+                                        @item.Status
+                                    </span>
+                                </td>
+                                <td>@item.ReliefProject?.Name</td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@item.ResourceID" class="btn btn-sm btn-info" title="Details">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@item.ResourceID" class="btn btn-sm btn-warning" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.ResourceID" class="btn btn-sm btn-danger" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>ResourceID</th>
-            <th>ReliefProjectID</th>
-            <th>Name</th>
-            <th>Quantity</th>
-            <th>Unit</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.ResourceID</td>
-                <td>@item.ReliefProjectID</td>
-                <td>@item.Name</td>
-                <td>@item.Quantity</td>
-                <td>@item.Unit</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ResourceID" class="btn btn-warning btn-sm">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.ResourceID" class="btn btn-info btn-sm">Details</a>
-                    <a asp-action="Delete" asp-route-id="@item.ResourceID" class="btn btn-danger btn-sm">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -27,5 +27,8 @@ namespace GiftOfGivers_WebApplication.Models
 
         // 🔗 One Project → Many Deliveries
         public ICollection<Delivery> Deliveries { get; set; } = new List<Delivery>();
+
+        // 🔗 One Project → Many Volunteer Tasks
+        public ICollection<VolunteerTask> VolunteerTasks { get; set; } = new List<VolunteerTask>();
     }
 }

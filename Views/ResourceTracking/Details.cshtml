@@ -5,24 +5,98 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Resource Details</h1>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0"><i class="bi bi-box-seam"></i> Resource Donation Details</h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Resource Name</dt>
+                                <dd class="col-sm-8"><strong>@Model.Name</strong></dd>
 
-<dl class="row">
-    <dt class="col-sm-2">ResourceID</dt>
-    <dd class="col-sm-10">@Model.ResourceID</dd>
+                                <dt class="col-sm-4">Category</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge bg-secondary">@Model.Category</span>
+                                </dd>
 
-    <dt class="col-sm-2">ReliefProjectID</dt>
-    <dd class="col-sm-10">@Model.ReliefProjectID</dd>
+                                <dt class="col-sm-4">Quantity</dt>
+                                <dd class="col-sm-8">
+                                    <strong>@Model.Quantity</strong> @Model.Unit
+                                </dd>
 
-    <dt class="col-sm-2">Name</dt>
-    <dd class="col-sm-10">@Model.Name</dd>
+                                <dt class="col-sm-4">Priority</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge @(Model.Priority == "Critical" ? "bg-danger" : Model.Priority == "High" ? "bg-warning" : "bg-info")">
+                                        @Model.Priority
+                                    </span>
+                                </dd>
 
-    <dt class="col-sm-2">Quantity</dt>
-    <dd class="col-sm-10">@Model.Quantity</dd>
+                                <dt class="col-sm-4">Status</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge @(Model.Status == "Available" ? "bg-success" : Model.Status == "Distributed" ? "bg-info" : "bg-secondary")">
+                                        @Model.Status
+                                    </span>
+                                </dd>
 
-    <dt class="col-sm-2">Unit</dt>
-    <dd class="col-sm-10">@Model.Unit</dd>
-    
-</dl>
+                                <dt class="col-sm-4">Donation Date</dt>
+                                <dd class="col-sm-8">@Model.DonationDate.ToString("MMMM dd, yyyy HH:mm")</dd>
 
-<a asp-action="Edit" asp-route-id="@Model.ResourceID" class="btn btn-warning">Edit</a> <a asp-action="Index" class="btn btn-secondary">Back</a>
+                                <dt class="col-sm-4">Donated By</dt>
+                                <dd class="col-sm-8">@Model.DonatedBy</dd>
+
+                                @if (!string.IsNullOrEmpty(Model.Location))
+                                {
+                                    <dt class="col-sm-4">Location</dt>
+                                    <dd class="col-sm-8">@Model.Location</dd>
+                                }
+
+                                @if (Model.ExpiryDate.HasValue)
+                                {
+                                    <dt class="col-sm-4">Expiry Date</dt>
+                                    <dd class="col-sm-8">@Model.ExpiryDate.Value.ToString("MMMM dd, yyyy")</dd>
+                                }
+
+                                <dt class="col-sm-4">Relief Project</dt>
+                                <dd class="col-sm-8">@Model.ReliefProject?.Name</dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            @if (!string.IsNullOrEmpty(Model.Description))
+                            {
+                                <h5>Description</h5>
+                                <p>@Model.Description</p>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.Notes))
+                            {
+                                <h5>Additional Notes</h5>
+                                <p>@Model.Notes</p>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <a asp-action="Edit" asp-route-id="@Model.ResourceID" class="btn btn-warning">
+                            <i class="bi bi-pencil"></i> Edit
+                        </a>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to List
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@Model.ResourceID" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

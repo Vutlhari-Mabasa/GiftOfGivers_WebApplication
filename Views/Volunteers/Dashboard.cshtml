@@ -1,0 +1,201 @@
+@model GiftOfGivers_WebApplication.Models.Volunteer
+
+@{
+    ViewData["Title"] = "Volunteer Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold mb-0"><i class="bi bi-speedometer2"></i> Welcome, @Model.FirstName!</h1>
+            <p class="text-muted">Your Volunteer Dashboard</p>
+        </div>
+    </div>
+
+    <!-- Status Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="card-body text-white">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="bi bi-check-circle" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <div>
+                            <h6 class="card-subtitle mb-1 opacity-75">Active Assignments</h6>
+                            <h2 class="card-title mb-0">@ViewBag.Assignments.Count</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <div class="card-body text-white">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="bi bi-list-task" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <div>
+                            <h6 class="card-subtitle mb-1 opacity-75">Available Tasks</h6>
+                            <h2 class="card-title mb-0">@ViewBag.OpenTasks.Count</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                <div class="card-body text-white">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="bi bi-hourglass-split" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <div>
+                            <h6 class="card-subtitle mb-1 opacity-75">Status</h6>
+                            <h5 class="card-title mb-0">@Model.Status</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                <div class="card-body text-white">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="bi bi-calendar3" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <div>
+                            <h6 class="card-subtitle mb-1 opacity-75">Member Since</h6>
+                            <h6 class="card-title mb-0">@Model.RegistrationDate.ToString("MMM yyyy")</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- My Assignments -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-list-check"></i> My Active Assignments</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.Assignments != null && ViewBag.Assignments.Count > 0)
+                    {
+                        <div class="list-group">
+                            @foreach (var assignment in ViewBag.Assignments)
+                            {
+                                <div class="list-group-item border-0 shadow-sm mb-2">
+                                    <div class="d-flex w-100 justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1">@assignment.VolunteerTask?.Title</h6>
+                                            <p class="mb-1 text-muted small">@assignment.VolunteerTask?.Description</p>
+                                            <small class="text-muted">
+                                                <i class="bi bi-geo-alt"></i> @assignment.VolunteerTask?.Location | 
+                                                <i class="bi bi-calendar"></i> @assignment.AssignedDate.ToString("MMM dd, yyyy")
+                                            </small>
+                                        </div>
+                                        <span class="badge bg-info">@assignment.Status</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center py-3">
+                            <i class="bi bi-inbox" style="font-size: 3rem; opacity: 0.3;"></i><br>
+                            No active assignments
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Available Tasks -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="bi bi-plus-circle"></i> Available Tasks</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.OpenTasks != null && ViewBag.OpenTasks.Count > 0)
+                    {
+                        <div class="list-group">
+                            @foreach (var task in ViewBag.OpenTasks)
+                            {
+                                <div class="list-group-item border-0 shadow-sm mb-2">
+                                    <div class="d-flex w-100 justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1">@task.Title</h6>
+                                            <p class="mb-1 text-muted small">@task.Description</p>
+                                            <div class="d-flex gap-2 mb-2">
+                                                <span class="badge bg-primary">@task.Priority</span>
+                                                <span class="badge bg-secondary">@task.VolunteersNeeded volunteers needed</span>
+                                            </div>
+                                            <small class="text-muted">
+                                                <i class="bi bi-project-diagram"></i> @task.ReliefProject?.Name
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <a href="@Url.Action("Details", "VolunteerTasks", new { id = task.TaskID })" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye"></i> View Details
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center py-3">
+                            <i class="bi bi-check2-all" style="font-size: 3rem; opacity: 0.3;"></i><br>
+                            All tasks are assigned!
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Info -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-person"></i> Your Profile</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Name:</strong> @Model.FirstName @Model.LastName<br>
+                            <strong>Email:</strong> @Model.Email<br>
+                            <strong>Phone:</strong> @Model.Phone
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Status:</strong> <span class="badge bg-success">@Model.Status</span><br>
+                            <strong>Available Days:</strong> @Model.AvailableDays<br>
+                            <strong>Skills:</strong> @Model.Skills
+                        </div>
+                        <div class="col-md-4">
+                            <a href="@Url.Action("Edit", new { id = Model.VolunteerID })" class="btn btn-primary">
+                                <i class="bi bi-pencil"></i> Edit Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

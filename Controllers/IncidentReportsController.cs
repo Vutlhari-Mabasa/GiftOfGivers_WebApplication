@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using GiftOfGivers_WebApplication.Models;
 
 namespace GiftOfGivers_WebApplication.Controllers
 {
+    [Authorize]
     public class IncidentReportsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -54,10 +56,11 @@ namespace GiftOfGivers_WebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IncidentID,Name,Type,Location,StartDate")] IncidentReport incidentReport)
+        public async Task<IActionResult> Create([Bind("Name,Type,Location,StartDate,Description,SeverityLevel,EstimatedAffectedPeople,Status,ReportedBy,ContactInformation")] IncidentReport incidentReport)
         {
             if (ModelState.IsValid)
             {
+                incidentReport.CreatedAt = DateTime.Now;
                 _context.Add(incidentReport);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,7 +89,7 @@ namespace GiftOfGivers_WebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IncidentID,Name,Type,Location,StartDate")] IncidentReport incidentReport)
+        public async Task<IActionResult> Edit(int id, [Bind("IncidentID,Name,Type,Location,StartDate,Description,SeverityLevel,EstimatedAffectedPeople,Status,ReportedBy,ContactInformation")] IncidentReport incidentReport)
         {
             if (id != incidentReport.IncidentID)
             {

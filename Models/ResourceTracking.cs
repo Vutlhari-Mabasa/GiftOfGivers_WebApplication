@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,15 +13,49 @@ namespace GiftOfGivers_WebApplication.Models
         [ForeignKey("ReliefProject")]
         public int ReliefProjectID { get; set; }
 
-        [Required]
-        public string Name { get; set; }
+        [Required(ErrorMessage = "Resource name is required")]
+        [Display(Name = "Resource Name")]
+        public string Name { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Quantity is required")]
+        [Display(Name = "Quantity")]
         public int Quantity { get; set; }
 
-        public string Unit { get; set; }
+        [Display(Name = "Unit")]
+        public string Unit { get; set; } = string.Empty;
 
-        public ReliefProject ReliefProject { get; set; }
+        [Display(Name = "Category")]
+        public string Category { get; set; } = "General";
+
+        [Display(Name = "Description")]
+        [DataType(DataType.MultilineText)]
+        public string? Description { get; set; }
+
+        [Display(Name = "Donated By")]
+        public string? DonatedBy { get; set; }
+
+        [Display(Name = "Donation Date")]
+        [DataType(DataType.DateTime)]
+        public DateTime DonationDate { get; set; } = DateTime.Now;
+
+        [Display(Name = "Priority")]
+        public string Priority { get; set; } = "Medium";
+
+        [Display(Name = "Status")]
+        public string Status { get; set; } = "Available";
+
+        [Display(Name = "Location")]
+        public string? Location { get; set; }
+
+        [Display(Name = "Expiry Date (if applicable)")]
+        [DataType(DataType.Date)]
+        public DateTime? ExpiryDate { get; set; }
+
+        [Display(Name = "Notes")]
+        [DataType(DataType.MultilineText)]
+        public string? Notes { get; set; }
+
+        public ReliefProject? ReliefProject { get; set; }
 
         // 🔗 One Resource → Many Deliveries
         public ICollection<Delivery> Deliveries { get; set; } = new List<Delivery>();

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using GiftOfGivers_WebApplication.Models;
 
 namespace GiftOfGivers_WebApplication.Controllers
 {
+    [Authorize]
     public class ResourceTrackingController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -55,10 +57,11 @@ namespace GiftOfGivers_WebApplication.Controllers
         // POST: ResourceTracking/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ResourceID,ReliefProjectID,Name,Quantity,Unit")] ResourceTracking resourceTracking)
+        public async Task<IActionResult> Create([Bind("ReliefProjectID,Name,Quantity,Unit,Category,Description,DonatedBy,DonationDate,Priority,Location,ExpiryDate,Notes")] ResourceTracking resourceTracking)
         {
             if (ModelState.IsValid)
             {
+                resourceTracking.Status = "Available";
                 _context.Add(resourceTracking);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -91,7 +94,7 @@ namespace GiftOfGivers_WebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ResourceID,ReliefProjectID,Name,Quantity,Unit")] ResourceTracking resourceTracking)
+        public async Task<IActionResult> Edit(int id, [Bind("ResourceID,ReliefProjectID,Name,Quantity,Unit,Category,Description,DonatedBy,DonationDate,Priority,Location,ExpiryDate,Notes,Status")] ResourceTracking resourceTracking)
         {
             if (id != resourceTracking.ResourceID)
             {

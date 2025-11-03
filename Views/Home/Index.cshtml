@@ -3,10 +3,125 @@
     ViewData["Title"] = "Gift Of Givers - Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Gift Of Givers</h1>
-    <p>This is the homepage of your disaster relief management system.</p>
-    <p>
-        <a href="/swagger" class="btn btn-primary" target="_blank">Go to API Docs</a>
-    </p>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="card shadow-lg border-0" style="background-color: rgba(255, 255, 255, 0.95); margin-top: 50px; padding: 40px;">
+                <div class="text-center mb-4">
+                    <h1 class="display-4 mb-3" style="color: #66a6ff; font-weight: 700;">
+                        <i class="bi bi-heart-pulse"></i> Gift Of Givers
+                    </h1>
+                    <p class="lead">Comprehensive Disaster Relief Management Platform</p>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="card border-0 h-100 text-center shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <div class="card-body text-white p-4">
+                                <i class="bi bi-exclamation-triangle-fill" style="font-size: 48px;"></i>
+                                <h5 class="card-title mt-3">Report Incidents</h5>
+                                <p class="card-text">Submit disaster incident reports with detailed information</p>
+                                @if (User.Identity!.IsAuthenticated)
+                                {
+                                    <a href="/IncidentReports" class="btn btn-light btn-sm mt-2">
+                                        <i class="bi bi-arrow-right"></i> Report Now
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 h-100 text-center shadow-sm" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                            <div class="card-body text-white p-4">
+                                <i class="bi bi-box-seam-fill" style="font-size: 48px;"></i>
+                                <h5 class="card-title mt-3">Donate Resources</h5>
+                                <p class="card-text">Contribute food, medical supplies, and essential items</p>
+                                @if (User.Identity!.IsAuthenticated)
+                                {
+                                    <a href="/ResourceTracking" class="btn btn-light btn-sm mt-2">
+                                        <i class="bi bi-arrow-right"></i> Donate
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 h-100 text-center shadow-sm" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <div class="card-body text-white p-4">
+                                <i class="bi bi-people-fill" style="font-size: 48px;"></i>
+                                <h5 class="card-title mt-3">Volunteer</h5>
+                                <p class="card-text">Join relief efforts and make a difference</p>
+                                @if (User.Identity!.IsAuthenticated)
+                                {
+                                    <a href="/Volunteers/Register" class="btn btn-light btn-sm mt-2">
+                                        <i class="bi bi-arrow-right"></i> Register
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 h-100 text-center shadow-sm" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                            <div class="card-body text-white p-4">
+                                <i class="bi bi-clipboard-data-fill" style="font-size: 48px;"></i>
+                                <h5 class="card-title mt-3">Track Progress</h5>
+                                <p class="card-text">Monitor relief operations and distributions</p>
+                                @if (User.Identity!.IsAuthenticated)
+                                {
+                                    <a href="/ReliefProjects" class="btn btn-light btn-sm mt-2">
+                                        <i class="bi bi-arrow-right"></i> View
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @if (!User.Identity!.IsAuthenticated)
+                {
+                    <div class="text-center border-top pt-4">
+                        <h4 class="mb-3">Ready to Help?</h4>
+                        <a href="/Account/Register" class="btn btn-primary btn-lg me-2">
+                            <i class="bi bi-person-plus-fill"></i> Get Started
+                        </a>
+                        <a href="/Account/Login" class="btn btn-outline-primary btn-lg">
+                            <i class="bi bi-box-arrow-in-right"></i> Sign In
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center border-top pt-4">
+                        <h4 class="mb-3">Quick Actions</h4>
+                        <div class="row justify-content-center g-3">
+                            <div class="col-auto">
+                                <a href="/IncidentReports/Create" class="btn btn-danger">
+                                    <i class="bi bi-exclamation-circle"></i> Report Incident
+                                </a>
+                            </div>
+                            <div class="col-auto">
+                                <a href="/ResourceTracking/Create" class="btn btn-success">
+                                    <i class="bi bi-heart-fill"></i> Donate Resources
+                                </a>
+                            </div>
+                            <div class="col-auto">
+                                <a href="/Volunteers/Dashboard" class="btn btn-info">
+                                    <i class="bi bi-speedometer2"></i> Volunteer Dashboard
+                                </a>
+                            </div>
+                            <div class="col-auto">
+                                <a href="/VolunteerTasks" class="btn btn-warning">
+                                    <i class="bi bi-list-task"></i> Browse Tasks
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

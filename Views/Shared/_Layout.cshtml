@@ -3,6 +3,7 @@
 <head>
     <title>@ViewData["Title"] - Gift Of Givers</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
@@ -104,14 +105,56 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Donors">Donors</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/IncidentReports">Incident Reports</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/ReliefProjects">Relief Projects</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Donations">Donations</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/ResourceTracking">Resources</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Deliveries">Deliveries</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/swagger" target="_blank">API Docs</a></li>
+                    @if (User.Identity!.IsAuthenticated)
+                    {
+                        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/IncidentReports"><i class="bi bi-exclamation-triangle"></i> Incidents</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/ResourceTracking"><i class="bi bi-box"></i> Resources</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-people"></i> Volunteer
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/Volunteers/Dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                                <li><a class="dropdown-item" href="/Volunteers/Register"><i class="bi bi-person-plus"></i> Register</a></li>
+                                <li><a class="dropdown-item" href="/VolunteerTasks"><i class="bi bi-list-task"></i> Tasks</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-gear"></i> Management
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/Donors"><i class="bi bi-people"></i> Donors</a></li>
+                                <li><a class="dropdown-item" href="/ReliefProjects"><i class="bi bi-folder"></i> Relief Projects</a></li>
+                                <li><a class="dropdown-item" href="/Donations"><i class="bi bi-cash"></i> Donations</a></li>
+                                <li><a class="dropdown-item" href="/Deliveries"><i class="bi bi-truck"></i> Deliveries</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/Volunteers"><i class="bi bi-list-ul"></i> All Volunteers</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="/swagger" target="_blank"><i class="bi bi-file-text"></i> API</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle"></i> @User.Identity.Name
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <form asp-controller="Account" asp-action="Logout" method="post" class="dropdown-item" style="cursor: pointer;">
+                                        <button type="submit" class="btn btn-link p-0 w-100 text-start text-decoration-none" style="color: #333;">
+                                            <i class="bi bi-box-arrow-right"></i> Sign Out
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Account/Login"><i class="bi bi-box-arrow-in-right"></i> Sign In</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Account/Register"><i class="bi bi-person-plus"></i> Sign Up</a></li>
+                    }
                 </ul>
             </div>
         </div>
@@ -120,5 +163,8 @@
     <main role="main" class="container mt-4">
         @RenderBody()
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
